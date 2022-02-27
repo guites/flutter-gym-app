@@ -28,13 +28,10 @@ class DB {
     await deleteDatabase(dbPath);
 
     ByteData data = await rootBundle.load("assets/exercises_only.sqlite3");
-    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    List<int> bytes =
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     await File(dbPath).writeAsBytes(bytes);
 
-    return await openDatabase(
-      join(dbPath),
-    );
-
+    return await openDatabase(join(dbPath));
   }
-
 }
