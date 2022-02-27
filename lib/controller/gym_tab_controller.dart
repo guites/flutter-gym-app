@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:workout_app/models/exercise.dart';
 
-class TabModel extends ChangeNotifier {
+class GymTabController extends ChangeNotifier {
   /// Internal, private state of the cart.
   final List<Exercise> _exercises = [];
 
@@ -18,6 +18,11 @@ class TabModel extends ChangeNotifier {
   void add(Exercise exercise) {
     _exercises.add(exercise);
     // This call tells the widgets that are listening to this model to rebuild.
+    notifyListeners();
+  }
+
+  void remove(Exercise exercise) {
+    _exercises.remove(exercise);
     notifyListeners();
   }
 

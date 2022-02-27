@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:workout_app/models/tab_model.dart';
+import 'package:workout_app/controller/gym_tab_controller.dart';
 import 'package:workout_app/models/exercise.dart';
 
 void main() {
   test('adding item increases total cost', () {
-    final tab = TabModel();
+    final tab = GymTabController();
     final exercisesCount = tab.exerciseCount;
     expect(exercisesCount, 0);
     tab.addListener(() {

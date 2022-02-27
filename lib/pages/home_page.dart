@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:workout_app/api/exercises.dart';
+import 'package:provider/provider.dart';
 import 'package:workout_app/api/languages.dart';
+import 'package:workout_app/controller/gym_tab_controller.dart';
+import 'package:workout_app/controller/language_controller.dart';
 import 'package:workout_app/models/language.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,7 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedLanguage = 2; // defaults to english
 
   List<DropdownMenuItem<int>> createDropdownItems(snapshot) {
     List<DropdownMenuItem<int>> items = [];
@@ -28,62 +29,51 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'This is the workout app',
-            ),
-            FutureBuilder(
-              future: languages(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return DropdownButton(
-                    value: _selectedLanguage,
-                    onChanged: (int? newValue) {
-                      setState(() {
-                        _selectedLanguage = newValue!;
-                      });
-                    },
-                    items: createDropdownItems(snapshot),
-                  );
-                }
-                return const Text('Ocorreu um erro!');
-              },
-            ),
-            FutureBuilder(
-              future: exercises(_selectedLanguage),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(snapshot.data[index].name),
-                          );
-                        }),
-                  );
-                }
-                return const Text('Ocorreu um erro!');
-              },
-            )
-          ],
+    return Consumer<LanguageController>(
+      builder: (context, languageController, child) => Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'The gym',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              const Divider(),
+              const Text(
+                'Choose a language',
+              ),
+              FutureBuilder(
+                future: languages(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return DropdownButton(
+                      value: languageController.currentLanguage,
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          languageController.setLanguage(newValue!);
+                        });
+                      },
+                      items: createDropdownItems(snapshot),
+                    );
+                  }
+                  return const Text('Ocorreu um erro!');
+                },
+              ),
+              TextButton(onPressed: () {
+                Navigator.pushNamed(context, '/exercises');
+              }, child: const Text('Go to Exercises Page'))
+            ],
+          ),
         ),
       ),
     );
