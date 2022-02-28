@@ -10,10 +10,10 @@ class GymTabController extends ChangeNotifier {
   /// An unmodifiable view of the items in the cart.
   UnmodifiableListView<Exercise> get exercises => UnmodifiableListView(_exercises);
 
-  /// The current total price of all items (assuming all items cost $42).
+  /// The current quantity of exercises
   int get exerciseCount => _exercises.length;
 
-  /// Adds [exercise] to cart. This and [removeAll] are the only ways to modify the
+  /// Adds [exercise] to cart. This, [remove] and [removeAll] are the only ways to modify the
   /// cart from the outside.
   void add(Exercise exercise) {
     _exercises.add(exercise);
