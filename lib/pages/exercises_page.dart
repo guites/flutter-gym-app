@@ -16,6 +16,34 @@ class ExercisesPage extends StatefulWidget {
 }
 
 class _ExercisesPageState extends State<ExercisesPage> {
+  List<Exercise>? allExercises;
+  String _searchText = '';
+
+  Future<List<Exercise>> grabExercises(int languageId, String searchText) async {
+    late List<Exercise> _allExercises;
+    if (allExercises != null && allExercises!.isNotEmpty) {
+      if (searchText.isNotEmpty && searchText.length > 2) {
+        _allExercises = allExercises!
+            .where((e) => e.name.toLowerCase().contains(searchText.toLowerCase()))
+            .cast<Exercise>()
+            .toList();
+      } else {
+        _allExercises = allExercises!;
+      }
+    } else {
+      _allExercises = await exercises(languageId);
+      setState(() {
+        allExercises = _allExercises;
+      });
+    }
+    return _allExercises;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final int appCurrentLanguage = context.select<LanguageController, int>(
@@ -27,15 +55,26 @@ class _ExercisesPageState extends State<ExercisesPage> {
         title: Text(widget.title),
         actions: [
           IconButton(
-              onPressed: () => Navigator.pushNamed(context, '/gym-tab'),
-              icon: const Icon(Icons.list_alt_rounded),
+            onPressed: () => Navigator.pushNamed(context, '/gym-tab'),
+            icon: const Icon(Icons.list_alt_rounded),
           )
         ],
       ),
       body: Column(
         children: [
+          TextField(
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.all(8),
+              hintText: 'Search for an exercise',
+            ),
+            onChanged: (newStr) {
+              setState(() {
+                _searchText = newStr;
+              });
+            },
+          ),
           FutureBuilder(
-            future: exercises(appCurrentLanguage),
+            future: grabExercises(appCurrentLanguage, _searchText),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
