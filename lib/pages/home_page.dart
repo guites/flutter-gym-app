@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app/api/languages.dart';
-import 'package:workout_app/controller/gym_tab_controller.dart';
 import 'package:workout_app/controller/language_controller.dart';
 import 'package:workout_app/models/language.dart';
 

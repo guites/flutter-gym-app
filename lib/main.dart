@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app/controller/language_controller.dart';
+import 'package:workout_app/pages/exercise_counter_page.dart';
 import 'package:workout_app/pages/exercises_page.dart';
 import 'package:workout_app/pages/gym_tab_page.dart';
 import 'package:workout_app/pages/home_page.dart';

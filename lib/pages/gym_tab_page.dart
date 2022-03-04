@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app/controller/gym_tab_controller.dart';
+import 'package:workout_app/pages/exercise_counter_page.dart';
 
 class GymTabPage extends StatefulWidget {
   final String title;
@@ -48,7 +49,14 @@ class _TabList extends StatelessWidget {
                   icon: const Icon(Icons.remove_circle_outline),
                   onPressed: () => gymTab.remove(gymTab.exercises[index]),
                 ),
-                title: Text(gymTab.exercises[index].name)))
+                title: TextButton(
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ExerciseCounterPage(
+                              exercise: gymTab.exercises[index]))),
+                  child: Text(gymTab.exercises[index].name),
+                )))
         : const Center(child: Text('You haven\'t picked any exercises yet!'));
   }
 }
